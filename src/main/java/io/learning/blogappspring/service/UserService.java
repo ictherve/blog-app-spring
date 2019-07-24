@@ -10,10 +10,10 @@ public interface UserService {
 
     User findById(Long id) throws Exception;
 
-    User Save(User user);
+    User Save(User user) throws Exception;
 
-    User update(User user);
+    User update(User user) throws Exception;
 
-    User delete(User user);
+    void delete(Long id);
 
 }
