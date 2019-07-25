@@ -11,5 +11,5 @@ spring:
     database: postgresql
     properties.hibernate.temp.use_jdbc_metadata_defaults: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true

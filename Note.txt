@@ -57,3 +57,9 @@ If you are using IntelliJ :
     - Mapstruct support (by mapstruct)
  - In the Preferences -> compile -> annotation processors :
    - Activate Enable annotation processing
+
+
+Custom Query (@Query)
+
+Don't know why but when writting a custom query, always begin by typing @Query(value="") then type your sql query inside
+the double quote, otherwise you will an error and i don't why and how to resolve it.
