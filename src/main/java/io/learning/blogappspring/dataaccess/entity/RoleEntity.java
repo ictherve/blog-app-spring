@@ -3,6 +3,7 @@ package io.learning.blogappspring.dataaccess.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Data
@@ -16,6 +17,9 @@ public class RoleEntity {
 
     @Column(unique = true, nullable = false)
     private String name;
+
+    @ManyToMany(mappedBy = "roles")
+    private Collection<UserEntity> users;
 
     @Override
     public boolean equals(Object o) {

@@ -1,4 +1,4 @@
-Lombok
+Lombok and Mpastruct installation
 
 To use lombok and mapstruct you must import the dependencies :
 
@@ -63,3 +63,58 @@ Custom Query (@Query)
 
 Don't know why but when writting a custom query, always begin by typing @Query(value="") then type your sql query inside
 the double quote, otherwise you will an error and i don't why and how to resolve it.
+
+
+Mapstruct
+
+In this application, a User can have one or many Role and a Role can be found in one or many User (ie : ManyToMany relation)
+and we want only the user to manage the operation when converting UserToUserEntity or UserToUserEntity in order to  avoid cyclic
+operation and we can avoid that by not!!!! putting a collection of user in the Role. So Role and User will look like this :
+
+
+@Data
+public class Role {
+
+    private Long id;
+    private String name;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equals(id, role.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+}
+
+
+@Data
+public class User {
+
+    private Long Id;
+    private String firstName;
+    private String lastName;
+    private String username;
+    private String password;
+    private String email;
+    private String birthDay;
+    private Collection<Role> roles;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(Id, user.Id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id);
+    }
+}

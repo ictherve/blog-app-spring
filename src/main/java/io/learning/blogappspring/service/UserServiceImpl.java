@@ -3,6 +3,7 @@ package io.learning.blogappspring.service;
 import io.learning.blogappspring.dataaccess.entity.UserEntity;
 import io.learning.blogappspring.dataaccess.mapper.UserMapper;
 import io.learning.blogappspring.dataaccess.repository.UserRepository;
+import io.learning.blogappspring.model.Role;
 import io.learning.blogappspring.model.User;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +24,12 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final RoleService roleService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, RoleService roleService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.roleService = roleService;
     }
 
     /**
@@ -65,9 +68,14 @@ public class UserServiceImpl implements UserService{
      *     <li>username or email is null </li>
      *     <li>username or email already exists</li>
      * </ul>
-     * If any of those rules is respected we throw an exception with a message corresponding to the rule.
-     * Otherwise we convert the user to an entity({@link UserEntity},  save the entity, retrieve it and convert it to
-     * a user and return it
+     * If any of those rules is triggered we throw an exception with a message corresponding to the rule.
+     * Otherwise we :
+     * <ul>
+     *     <li>Add a role to the user (ROLE_USER) if it exists otherwise create a new one</li>
+     *     <li>Convert the user to an entity({@link UserEntity}</li>
+     *     <li>save the entity, retrieve </li>
+     *     <li>convert it to a {@link User} and return it</li>
+     * </ul>
      * @param user the {@link User} to be saved
      * @return the {@link User} saved given the user parameter
      * @throws Exception
@@ -86,6 +94,8 @@ public class UserServiceImpl implements UserService{
         if(!usersFounded.isEmpty())
             throw new Exception(USER_ALREADY_EXISTS);
 
+        setRoleOfTheUserToSave(user);
+
         UserEntity userEntity = userMapper.toEntity(user);
 
         userEntity = userRepository.save(userEntity);
@@ -100,7 +110,13 @@ public class UserServiceImpl implements UserService{
           <li>user do not exists</li>
      *    <li>username or email already exists</li>
      * </ul>
-     * If any of those rules is respected we throw an exception with a message corresponding to the rule.
+     * If any of those rules is triggered we throw an exception with a message corresponding to the rule.
+     * Otherwise we:
+     * <ul>
+     *     <li>Update {@link UserEntity coming from the database} with user data</li>
+     *     <li>save the entity, retrieve </li>
+     *     <li>convert it to a {@link User} and return it</li>
+     * </ul>
      * @param user the {@link User} to be updated
      * @return a the {@link User} updated
      * @throws Exception if we fall in one of the conditions on the top
@@ -119,14 +135,22 @@ public class UserServiceImpl implements UserService{
         if(!optionalOfUserToUpdate.isPresent())
             throw new Exception(USER_DOESNT_EXIST);
 
-        Collection<UserEntity> usersFounded = userRepository.findByUsernameOrEmailExceptCurrentUser(user.getUsername(), user.getEmail(), user.getId());
+        Collection<UserEntity> usersFounded = userRepository.findByUsernameOrEmailExceptCurrentUser(user.getUsername(),
+                user.getEmail(), user.getId());
 
         if(!usersFounded.isEmpty())
             throw new Exception((USERNAME_OR_EMAIL_ALREADY_EXISTS));
 
-        // TODO: 2019-07-25 I think it's better to update the user from database rather than saving the object comming from the UserForm
-        user.setId(optionalOfUserToUpdate.get().getId());
+        // TODO: 2019-07-25 I think there is probably a better way to update a user(maybe we can just recieve the
+        //  fields to be updated and not all the fields)
+        /*user.setId(optionalOfUserToUpdate.get().getId());
         UserEntity userToUpdate = userMapper.toEntity(user);
+        userToUpdate = userRepository.save(userToUpdate);*/
+
+        UserEntity userToUpdate = optionalOfUserToUpdate.get();
+
+        updateFieldsOfTheUserToUpdate(userToUpdate, user);
+
         userToUpdate = userRepository.save(userToUpdate);
 
         return userMapper.toModel(userToUpdate);
@@ -146,5 +170,33 @@ public class UserServiceImpl implements UserService{
 
         if(Objects.nonNull(userToSave))
             userRepository.delete(userToSave);
+    }
+
+    private void setRoleOfTheUserToSave(User userToSave) {
+
+        Role role = roleService.createIfNotExists("ROLE_USER");
+        userToSave.addRole(role);
+    }
+
+    private void updateFieldsOfTheUserToUpdate(UserEntity userToUpdate, User user) {
+
+        if(userToUpdate.getFirstName() != user.getFirstName())
+            userToUpdate.setFirstName(user.getFirstName());
+
+        if(userToUpdate.getLastName() != user.getLastName())
+            userToUpdate.setLastName(user.getLastName());
+
+        if(userToUpdate.getUsername() != user.getUsername())
+            userToUpdate.setUsername(user.getUsername());
+
+        if(userToUpdate.getPassword() != user.getPassword())
+            userToUpdate.setPassword(user.getPassword());
+
+        if(userToUpdate.getEmail() != user.getEmail())
+            userToUpdate.setEmail(user.getEmail());
+
+        if(userToUpdate.getBirthDay() != user.getBirthDay())
+            userToUpdate.setBirthDay(user.getBirthDay());
+
     }
 }

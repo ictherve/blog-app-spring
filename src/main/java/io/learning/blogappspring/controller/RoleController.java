@@ -36,7 +36,7 @@ public class RoleController {
     public ResponseEntity save(@RequestBody Role role) {
 
         try {
-            return ResponseEntity.ok(roleService.Save(role));
+            return ResponseEntity.ok(roleService.save(role));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }

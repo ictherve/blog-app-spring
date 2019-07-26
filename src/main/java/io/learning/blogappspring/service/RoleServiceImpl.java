@@ -31,22 +31,27 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
-    public Role findById(Long id) throws Exception {
+    public Role findById(Long id) /*throws Exception*/ {
 
-        if(Objects.isNull(id))
+        /*if(Objects.isNull(id))
             throw new IllegalArgumentException(ROLE_DOESNT_EXIST);
 
         Optional<RoleEntity> optionalRoleFromDatabase = roleRepository.findById(id);
 
         if(!optionalRoleFromDatabase.isPresent())
-            throw new Exception(ROLE_NOT_FOUND);
+            throw new Exception(ROLE_NOT_FOUND);*/
 
-        return roleMapper.toModel(optionalRoleFromDatabase.get());
+        RoleEntity roleFromDatabase = null;
+
+        if(Objects.nonNull(id))
+            roleFromDatabase = roleRepository.findById(id).orElse(null);
+
+        return roleMapper.toModel(roleFromDatabase);
 
     }
 
     @Override
-    public Role Save(Role role) throws Exception {
+    public Role save(Role role) throws Exception {
 
         if(Objects.isNull(role))
             throw new IllegalArgumentException(ROLE_CANNOT_BE_NULL);
@@ -78,9 +83,9 @@ public class RoleServiceImpl implements RoleService{
         if(Objects.isNull(role.getId()))
             throw new Exception(ROLE_DOESNT_EXIST);
 
-        Optional<RoleEntity> optionalOfRoleFromDatabase = roleRepository.findById(role.getId());
+        Optional<RoleEntity> roleFromDatabase = roleRepository.findById(role.getId());
 
-        if(!optionalOfRoleFromDatabase.isPresent())
+        if(!roleFromDatabase.isPresent())
             throw new Exception(USER_DOESNT_EXIST);
 
         RoleEntity roleEntity = roleRepository.findByNameAndIdIsNot(role.getName(), role.getId());
@@ -88,7 +93,7 @@ public class RoleServiceImpl implements RoleService{
         if(Objects.nonNull(roleEntity))
             throw new Exception(ROLE_ALREADY_EXISTS);
 
-        role.setId(optionalOfRoleFromDatabase.get().getId());
+        role.setId(roleFromDatabase.get().getId());
 
         roleEntity = roleMapper.toEntity(role);
         roleEntity = roleRepository.save(roleEntity);
@@ -107,4 +112,19 @@ public class RoleServiceImpl implements RoleService{
         if(Objects.nonNull(roleToSave))
             roleRepository.delete(roleToSave);
     }
+
+    @Override
+    public Role createIfNotExists(String roleName) {
+
+        RoleEntity role = roleRepository.findByName(roleName);
+
+        if(Objects.isNull(role)) {
+            role = new RoleEntity();
+            role.setName("ROLE_USER");
+            role = roleRepository.save(role);
+        }
+        return roleMapper.toModel(role);
+    }
+
+
 }

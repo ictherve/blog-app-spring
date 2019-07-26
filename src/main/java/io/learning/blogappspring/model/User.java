@@ -2,6 +2,8 @@ package io.learning.blogappspring.model;
 
 import lombok.Data;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 
 @Data
@@ -14,6 +16,14 @@ public class User {
     private String password;
     private String email;
     private String birthDay;
+    private Collection<Role> roles;
+
+    public void addRole(Role role) {
+
+        if(Objects.isNull(roles))
+            roles = new HashSet<>();
+        roles.add(role);
+    }
 
     @Override
     public boolean equals(Object o) {
