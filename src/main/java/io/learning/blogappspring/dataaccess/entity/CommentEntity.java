@@ -13,9 +13,13 @@ public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String text;
+
     private Boolean isRead;
-    private Boolean sentAt;
+
+    private String sentAt;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false, updatable = false, referencedColumnName = "id")

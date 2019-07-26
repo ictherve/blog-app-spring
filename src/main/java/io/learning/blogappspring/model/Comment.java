@@ -10,7 +10,7 @@ public class Comment {
     private Long id;
     private String text;
     private Boolean isRead;
-    private Boolean sentAt;
+    private String sentAt;
     private User author;
     private Post post;
 

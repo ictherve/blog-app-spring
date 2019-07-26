@@ -25,4 +25,23 @@ public class Constant {
     public static final String ROLENAME_CANNOT_BE_NULL = "ROLENAME_CANNOT_BE_NULL";
 
     public static final String ROLE_ALREADY_EXISTS = "ROLE_ALREADY_EXISTS";
+
+
+    public static final String POST_CANNOT_BE_NULL = "POST_CANNOT_BE_NULL";
+
+    public static final String POST_DOESNT_EXISTS = "POST_DOESNT_EXISTS";
+
+    public static final String POST_ALREADY__EXISTS = "POST_ALREADY__EXISTS";
+
+
+
+    public static final String COMMENT_CANNOT_BE_NULL = "COMMENT_CANNOT_BE_NULL";
+
+    public static final String COMMENT_DOESNT_EXISTS = "COMMENT_DOESNT_EXISTS";
+
+    public static final String COMMENT_ALREADY_EXISTS = "COMMENT_ALREADY_EXISTS";
+
+    public static final String COMMENT_TEXT_CANNOT_BE_NULL = "COMMENT_TEXT_CANNOT_BE_NULL";
+
+    public static final String AUTHOR_TEXT_CANNOT_BE_NULL = "AUTHOR_CANNOT_BE_NULL";
 }
