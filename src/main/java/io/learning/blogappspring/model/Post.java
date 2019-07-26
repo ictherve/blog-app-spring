@@ -2,7 +2,6 @@ package io.learning.blogappspring.model;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Data
@@ -10,7 +9,6 @@ public class Post {
 
     private Long id;
     private String title;
-    private LocalDateTime updateAt;
 
     @Override
     public boolean equals(Object o) {
