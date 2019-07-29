@@ -4,10 +4,9 @@ import io.learning.blogappspring.dataaccess.entity.PostEntity;
 import io.learning.blogappspring.model.Post;
 import org.mapstruct.Mapper;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Collection;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = UserMapper.class)
 public interface PostMapper {
 
     Post toModel(PostEntity postEntity);

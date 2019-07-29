@@ -22,11 +22,11 @@ public class CommentEntity {
     private String sentAt;
 
     @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false, updatable = false, referencedColumnName = "id")
+    @JoinColumn(name = "author_id", nullable = false, referencedColumnName = "id")
     private UserEntity author;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false, updatable = false, referencedColumnName = "id")
+    @JoinColumn(name = "post_id", nullable = false, referencedColumnName = "id")
     private PostEntity post;
 
     @Override

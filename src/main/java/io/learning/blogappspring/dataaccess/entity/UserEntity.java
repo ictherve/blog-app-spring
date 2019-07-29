@@ -37,7 +37,7 @@ public class UserEntity {
     inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false))
     private Collection<RoleEntity> roles;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "creator")
     private Collection<PostEntity> posts;
 
     @OneToMany(mappedBy = "post")

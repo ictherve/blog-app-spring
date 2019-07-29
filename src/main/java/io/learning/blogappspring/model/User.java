@@ -9,7 +9,7 @@ import java.util.Objects;
 @Data
 public class User {
 
-    private Long Id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String username;
@@ -30,11 +30,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(Id, user.Id);
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Id);
+        return Objects.hash(id);
     }
 }

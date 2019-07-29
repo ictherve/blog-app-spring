@@ -33,6 +33,8 @@ public class Constant {
 
     public static final String POST_ALREADY__EXISTS = "POST_ALREADY__EXISTS";
 
+    public static final String TITLE_CANNOT_BE_NULL = "TITTLE_CANNOT_BE_NULL";
+
 
 
     public static final String COMMENT_CANNOT_BE_NULL = "COMMENT_CANNOT_BE_NULL";

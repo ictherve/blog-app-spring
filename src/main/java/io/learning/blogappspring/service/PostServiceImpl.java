@@ -4,6 +4,7 @@ import io.learning.blogappspring.dataaccess.entity.PostEntity;
 import io.learning.blogappspring.dataaccess.mapper.PostMapper;
 import io.learning.blogappspring.dataaccess.repository.PostRepository;
 import io.learning.blogappspring.model.Post;
+import io.learning.blogappspring.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -17,10 +18,12 @@ public class PostServiceImpl implements PostService{
 
     private final PostMapper postMapper;
     private final PostRepository postRepository;
+    private final UserService userService;
 
-    public PostServiceImpl(PostMapper postMapper, PostRepository postRepository) {
+    public PostServiceImpl(PostMapper postMapper, PostRepository postRepository, UserService userService) {
         this.postMapper = postMapper;
         this.postRepository = postRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -45,10 +48,23 @@ public class PostServiceImpl implements PostService{
         if(Objects.isNull(post))
             throw new IllegalArgumentException(POST_CANNOT_BE_NULL);
 
-        Optional<PostEntity> optional = postRepository.findById(post.getId());
+        if(Objects.isNull(post.getTitle()))
+            throw new IllegalArgumentException(TITLE_CANNOT_BE_NULL);
 
-        if(optional.isPresent())
+        if(Objects.isNull(post.getCreator()))
+            throw new IllegalArgumentException(USER_CANNOT_BE_NULL);
+
+        PostEntity existingPost = null;
+
+        if(Objects.nonNull(post.getId()))
+            existingPost = postRepository.findById(post.getId()).orElse(null);
+
+        if(Objects.nonNull(existingPost))
             throw new Exception(POST_ALREADY__EXISTS);
+
+        User creator = userService.findById(post.getCreator().getId());
+
+        post.setCreator(creator);
 
         PostEntity postToSave = postMapper.toEntity(post);
 

@@ -14,14 +14,16 @@ public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String title;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private Collection<CommentEntity> comments;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false, updatable = false, referencedColumnName = "id")
-    private UserEntity author;
+    @ManyToOne()
+    @JoinColumn(name = "creator_id", nullable = false, referencedColumnName = "id")
+    private UserEntity creator;
 
     @Override
     public boolean equals(Object o) {
